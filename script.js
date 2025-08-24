@@ -5,6 +5,7 @@ let resetNext = true;
 let currentOperator = null;
 let firstOperand = null;
 
+// ---------------- Calculator Logic ----------------
 buttons.forEach(button => {
   button.addEventListener("click", () => {
     const char = button.textContent.trim();
@@ -13,7 +14,7 @@ buttons.forEach(button => {
       clearDisplay();
     } else if (button.classList.contains("equals")) {
       calculateResult();
-    } else if (button.classList.contains("operator")) {  // ✅ use operator class
+    } else if (button.classList.contains("operator")) {
       setOperator(char);
     } else if (char === ".") {
       appendDecimal();
@@ -23,9 +24,7 @@ buttons.forEach(button => {
   });
 });
 
-
 function appendToDisplay(char) {
-  // Replace display if it's "0" or after operator/result
   if (display.textContent === "0" || resetNext) {
     display.textContent = char;
   } else {
@@ -52,13 +51,11 @@ function clearDisplay() {
 
 function setOperator(op) {
   const currentValue = parseFloat(display.textContent);
-
   if (firstOperand !== null && !resetNext) {
     calculateResult();
   } else {
     firstOperand = currentValue;
   }
-
   currentOperator = op;
   resetNext = true;
 }
@@ -82,14 +79,21 @@ function calculateResult() {
   }
 }
 
+// ---------------- Install Prompt Logic ----------------
 let deferredPrompt;
 
 window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault(); // stop automatic prompt
+  e.preventDefault(); // Stop automatic Chrome banner
   deferredPrompt = e;
+  showInstallButton();
+});
 
-  // Create an install button
+function showInstallButton() {
+  // Avoid creating multiple buttons
+  if (document.getElementById('install-btn')) return;
+
   const btn = document.createElement('button');
+  btn.id = 'install-btn';
   btn.textContent = "Install Calculator";
   btn.style.position = "fixed";
   btn.style.bottom = "20px";
@@ -98,12 +102,12 @@ window.addEventListener('beforeinstallprompt', (e) => {
   btn.style.zIndex = "1000";
   document.body.appendChild(btn);
 
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', async () => {
     deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(choice => {
-      console.log("User choice:", choice.outcome);
-      deferredPrompt = null;
-      btn.remove();
-    });
+    const choice = await deferredPrompt.userChoice;
+    console.log("User choice:", choice.outcome);
+    btn.remove();
+    deferredPrompt = null;
   });
-});
+}
+

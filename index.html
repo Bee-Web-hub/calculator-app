@@ -5,18 +5,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="manifest" href="manifest.json" />
 <meta name="theme-color" content="#1e1e2f" />
-s
+
 <title>Calculator</title>
 <style>
-  body { display:flex; justify-content:center; align-items:center; height:100vh; background:pink; font-family:Arial,sans-serif; }
-  .calculator { background:pink; padding:20px; border-radius:15px; width:300px; }
-  .display { background:#000; color:#0f0; font-size:2em; padding:15px; text-align:right; border-radius:10px; margin-bottom:15px; min-height:50px; }
-  .buttons { display:grid; grid-template-columns: repeat(4,1fr); gap:10px; }
-  .btn { padding:20px; font-size:1.2em; border:none; border-radius:10px; background:#444; color:white; cursor:pointer; }
+  body {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    background:pink;
+    font-family:Arial,sans-serif;
+  }
+  .calculator {
+    background:pink;
+    padding:20px;
+    border-radius:15px;
+    width:300px;
+  }
+  .display {
+    background:#000;
+    color:#0f0;
+    font-size:2em;
+    padding:15px;
+    text-align:right;
+    border-radius:10px;
+    margin-bottom:15px;
+    min-height:50px;
+  }
+  .buttons {
+    display:grid;
+    grid-template-columns: repeat(4,1fr);
+    gap:10px;
+  }
+  .btn {
+    padding:20px;
+    font-size:1.2em;
+    border:none;
+    border-radius:10px;
+    background:#444;
+    color:white;
+    cursor:pointer;
+  }
   .btn:hover { background:#666; }
-  .clear { background:#e74c3c; } .clear:hover { background:#c0392b; }
-  .equals { background:#27ae60; } .equals:hover { background:#1e8449; }
-  .operator { background:#ff69b4; } .operator:hover { background:#ff1493; }
+  .clear { background:#e74c3c; } 
+  .clear:hover { background:#c0392b; }
+  .equals { background:#27ae60; } 
+  .equals:hover { background:#1e8449; }
+  .operator { background:#ff69b4; } 
+  .operator:hover { background:#ff1493; }
 </style>
 </head>
 <body>
@@ -45,68 +81,18 @@ s
   </div>
 </div>
 
+<!-- Link your external JS file -->
+<script src="script.js"></script>
+
+<!-- Service Worker registration -->
 <script>
-const display = document.getElementById("display");
-const buttons = document.querySelectorAll(".btn");
-
-let resetNext = true;
-let firstOperand = null;
-let currentOperator = null;
-
-buttons.forEach(button => {
-  button.addEventListener("click", () => {
-    const char = button.textContent.trim();
-
-    if (button.classList.contains("clear")) {
-      display.textContent = "0";
-      firstOperand = null;
-      currentOperator = null;
-      resetNext = true;
-    } else if (button.classList.contains("equals")) {
-      if(currentOperator && firstOperand !== null){
-        const second = parseFloat(display.textContent);
-        let result;
-        switch(currentOperator){
-          case "+": result = firstOperand + second; break;
-          case "-": result = firstOperand - second; break;
-          case "*": result = firstOperand * second; break;
-          case "/": result = firstOperand / second; break;
-        }
-        display.textContent = result;
-        firstOperand = result;
-        currentOperator = null;
-        resetNext = true;
-      }
-    } else if (button.classList.contains("operator")) {
-      firstOperand = parseFloat(display.textContent);
-      currentOperator = char;
-      resetNext = true;
-    } else if(char === ".") {
-      if(resetNext){
-        display.textContent = "0.";
-        resetNext = false;
-      } else if(!display.textContent.includes(".")){
-        display.textContent += ".";
-      }
-    } else {
-      if(display.textContent === "0" || resetNext){
-        display.textContent = char;
-      } else {
-        display.textContent += char;
-      }
-      resetNext = false;
-    }
-  });
-});
-</script>
-<script>
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("./service-worker.js")
-      .then(() => console.log("Service Worker registered"))
-      .catch(err => console.error("SW registration failed:", err));
-  }
-</script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./service-worker.js")
+    .then(() => console.log("Service Worker registered"))
+    .catch(err => console.error("SW registration failed:", err));
+}
 </script>
 
 </body>
 </html>
+
