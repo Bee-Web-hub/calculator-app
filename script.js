@@ -81,3 +81,24 @@ function calculateResult() {
     resetNext = true;
   }
 }
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e; // save the event
+
+  // Show your custom install button here
+  const installBtn = document.createElement('button');
+  installBtn.textContent = "Install Calculator";
+  document.body.appendChild(installBtn);
+
+  installBtn.addEventListener('click', () => {
+    deferredPrompt.prompt(); // show the install prompt
+    deferredPrompt.userChoice.then(choiceResult => {
+      console.log(choiceResult.outcome);
+      deferredPrompt = null;
+      installBtn.remove(); // remove button after use
+    });
+  });
+});
