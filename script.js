@@ -85,20 +85,25 @@ function calculateResult() {
 let deferredPrompt;
 
 window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e; // save the event
+  e.preventDefault(); // stop automatic prompt
+  deferredPrompt = e;
 
-  // Show your custom install button here
-  const installBtn = document.createElement('button');
-  installBtn.textContent = "Install Calculator";
-  document.body.appendChild(installBtn);
+  // Create an install button
+  const btn = document.createElement('button');
+  btn.textContent = "Install Calculator";
+  btn.style.position = "fixed";
+  btn.style.bottom = "20px";
+  btn.style.right = "20px";
+  btn.style.padding = "10px 20px";
+  btn.style.zIndex = "1000";
+  document.body.appendChild(btn);
 
-  installBtn.addEventListener('click', () => {
-    deferredPrompt.prompt(); // show the install prompt
-    deferredPrompt.userChoice.then(choiceResult => {
-      console.log(choiceResult.outcome);
+  btn.addEventListener('click', () => {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(choice => {
+      console.log("User choice:", choice.outcome);
       deferredPrompt = null;
-      installBtn.remove(); // remove button after use
+      btn.remove();
     });
   });
 });

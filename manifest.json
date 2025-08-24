@@ -1,7 +1,7 @@
 {
   "name": "Pink calculator",
   "short_name": "Calculator",
-  "start_url": "index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#1e1e2f",
   "theme_color": "#1e1e2f",
