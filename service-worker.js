@@ -11,6 +11,8 @@ const FILES_TO_CACHE = [
 // Install: cache files and activate immediately
 self.addEventListener("install", event => {
   console.log("Service Worker: Installed");
+  self.addEventListener('fetch', e => e.respondWith(fetch(e.request)));
+
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
