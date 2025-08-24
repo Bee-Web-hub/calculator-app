@@ -1,0 +1,96 @@
+/* General page setup */
+body {
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+margin: 0;
+background: pink;
+font-family: Arial, sans-serif;
+}
+/* Calculator box */
+.calculator
+{
+  background: pink;   /* 👈 changed from dark gray */
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  width: 300px;
+}
+
+
+/* Display (the screen) */
+.display {
+  background: #000;       /* Black background */
+  color: #0f0;            /* Green text */
+  font-size: 2em;
+  padding: 15px;
+  text-align: right;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  min-height: 50px;
+  width: 100%;
+  box-sizing: border-box; /* So padding doesn’t break layout */
+  border: none;           /* Removes default input border */
+}
+
+/* Buttons container */
+.buttons {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 10px;
+}
+
+
+/* All buttons */
+.btn {
+padding: 20px;
+font-size: 1.2em;
+border: none;
+border-radius: 10px;
+background: #444;
+color: white;
+cursor: pointer;
+transition: background 0.2s;
+}
+
+.btn:hover
+/* Hover effect for all buttons */
+.btn:hover {
+  background-color: #ffb6c1; /* light pink */
+  transform: scale(1.05);   /* makes it pop a bit */
+  transition: 0.2s ease;    /* smooth animation */
+}
+
+/* Special style for the Equals button */
+.equals {
+  background-color: #ff69b4;   /* hot pink */
+  color: white;
+  font-weight: bold;
+}
+
+.equals:hover {
+  background-color: #ff1493;   /* deeper pink when hovered */
+  transform: scale(1.08);      /* slightly bigger than others */
+}
+
+ /* Hover effect for all buttons */
+.btn:hover {
+  background: #666;
+}
+
+/* Special buttons */
+.clear {
+background: #e74c3c; /* red */
+}
+.clear:hover {
+background: #c0392b;
+}
+
+
+.equals {
+background: #27ae60; /* green */
+}
+.equals:hover {
+background: #1e8449;
+}

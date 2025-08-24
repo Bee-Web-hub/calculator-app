@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#1e1e2f" />
+
+<title>Calculator App</title>
+
+<!-- Link to our CSS so the page gets styled (we’ll create this next) -->
+<link rel="stylesheet" href="styles.css" />
+
+</head>
+<body>
+<!-- The whole calculator box -->
+<div class="calculator">
+<!-- The screen where/* Hover effect for all buttons */
+.btn:hover {
+  background-color: #ffb6c1; /* light pink */
+  transform: scale(1.05);   /* makes it pop a bit */
+  transition: 0.2s ease;    /* smooth animation */
+}
+
+ numbers/results show -->
+<input type="text" id="display" class="display" value="0" readonly>
+
+<!-- Button grid -->
+<div class="buttons" role="group" aria-label="Calculator keypad">
+<!-- Each button is a <button> element so it’s accessible and clickable -->
+<button type="button" class="btn clear" aria-label="Clear">C</button>
+<button type="button" class="btn" aria-label="Divide">/</button>
+<button type="button" class="btn" aria-label="Multiply">*</button>
+<button type="button" class="btn" aria-label="Minus">-</button>
+
+
+<button type="button" class="btn">7</button>
+<button type="button" class="btn">8</button>
+<button type="button" class="btn">9</button>
+<button type="button" class="btn" aria-label="Plus">+</button>
+
+
+<button type="button" class="btn">4</button>
+<button type="button" class="btn">5</button>
+<button type="button" class="btn">6</button>
+<button type="button" class="btn equals" aria-label="Equals">=</button>
+
+<button type="button" class="btn">1</button>
+<button type="button" class="btn">2</button>
+<button type="button" class="btn">3</button>
+<button type="button" class="btn">0</button>
+
+
+<button type="button" class="btn" aria-label="Decimal point">.</button>
+</div>
+</div>
+
+<!-- Load our JavaScript at the end so the elements above already exist when JS runs -->
+<script src="script.js"></script>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register("service-worker.js")
+      .then(() => console.log("Service Worker registered!"))
+      .catch((err) => console.log("Service Worker failed:", err));
+  }
+</script>
+
+</body>
+</html>
