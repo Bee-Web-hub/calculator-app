@@ -1,23 +1,22 @@
 /* General page setup */
 body {
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100vh;
-margin: 0;
-background: pink;
-font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background: pink;
+  font-family: Arial, sans-serif;
 }
-/* Calculator box */
-.calculator
-{
-  background: pink;   /* 👈 changed from dark gray */
+
+/* Calculator container */
+.calculator {
+  background: pink;  
   padding: 20px;
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.5);
   width: 300px;
 }
-
 
 /* Display (the screen) */
 .display {
@@ -30,67 +29,57 @@ font-family: Arial, sans-serif;
   margin-bottom: 15px;
   min-height: 50px;
   width: 100%;
-  box-sizing: border-box; /* So padding doesn’t break layout */
-  border: none;           /* Removes default input border */
+  box-sizing: border-box; 
+  border: none;
 }
 
 /* Buttons container */
 .buttons {
-display: grid;
-grid-template-columns: repeat(4, 1fr);
-gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
 }
-
 
 /* All buttons */
 .btn {
-padding: 20px;
-font-size: 1.2em;
-border: none;
-border-radius: 10px;
-background: #444;
-color: white;
-cursor: pointer;
-transition: background 0.2s;
+  padding: 20px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 10px;
+  background: #444;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
 }
 
-.btn:hover
 /* Hover effect for all buttons */
 .btn:hover {
-  background-color: #ffb6c1; /* light pink */
-  transform: scale(1.05);   /* makes it pop a bit */
-  transition: 0.2s ease;    /* smooth animation */
+  background-color: #ffb6c1; 
+  transform: scale(1.05);   
 }
 
-/* Special style for the Equals button */
+/* Clear button */
+.clear {
+  background: #e74c3c; 
+}
+.clear:hover {
+  background: #c0392b;
+}
+
+/* Equals button */
 .equals {
-  background-color: #ff69b4;   /* hot pink */
+  background-color: #27ae60;   
   color: white;
   font-weight: bold;
 }
-
 .equals:hover {
-  background-color: #ff1493;   /* deeper pink when hovered */
-  transform: scale(1.08);      /* slightly bigger than others */
+  background-color: #1e8449;   
+  transform: scale(1.08);
 }
 
- /* Hover effect for all buttons */
-.btn:hover {
-  background: #666;
+/* Zero button spans two columns */
+.zero {
+  grid-column: span 2;
 }
 
-/* Special buttons */
-.clear {
-background: #e74c3c; /* red */
-}
-.clear:hover {
-background: #c0392b;
-}
-
-
-.equals {
-background: #27ae60; /* green */
-}
-.equals:hover {
-background: #1e8449;
-}
+/* Decimal button style can stay default or inherit .btn */

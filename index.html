@@ -1,70 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-<link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#1e1e2f" />
-
-<title>Calculator App</title>
-
-<!-- Link to our CSS so the page gets styled (we’ll create this next) -->
-<link rel="stylesheet" href="styles.css" />
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator</title>
+<style>
+  body { display:flex; justify-content:center; align-items:center; height:100vh; background:pink; font-family:Arial,sans-serif; }
+  .calculator { background:pink; padding:20px; border-radius:15px; width:300px; }
+  .display { background:#000; color:#0f0; font-size:2em; padding:15px; text-align:right; border-radius:10px; margin-bottom:15px; min-height:50px; }
+  .buttons { display:grid; grid-template-columns: repeat(4,1fr); gap:10px; }
+  .btn { padding:20px; font-size:1.2em; border:none; border-radius:10px; background:#444; color:white; cursor:pointer; }
+  .btn:hover { background:#666; }
+  .clear { background:#e74c3c; } .clear:hover { background:#c0392b; }
+  .equals { background:#27ae60; } .equals:hover { background:#1e8449; }
+  .operator { background:#ff69b4; } .operator:hover { background:#ff1493; }
+</style>
 </head>
 <body>
-<!-- The whole calculator box -->
+
 <div class="calculator">
-<!-- The screen where/* Hover effect for all buttons */
-.btn:hover {
-  background-color: #ffb6c1; /* light pink */
-  transform: scale(1.05);   /* makes it pop a bit */
-  transition: 0.2s ease;    /* smooth animation */
-}
+  <div id="display" class="display">0</div>
+  <div class="buttons">
+    <button class="btn clear">C</button>
+    <button class="btn operator">/</button>
+    <button class="btn operator">*</button>
+    <button class="btn operator">-</button>
+    <button class="btn operator">+</button>
 
- numbers/results show -->
-<input type="text" id="display" class="display" value="0" readonly>
-
-<!-- Button grid -->
-<div class="buttons" role="group" aria-label="Calculator keypad">
-<!-- Each button is a <button> element so it’s accessible and clickable -->
-<button type="button" class="btn clear" aria-label="Clear">C</button>
-<button type="button" class="btn" aria-label="Divide">/</button>
-<button type="button" class="btn" aria-label="Multiply">*</button>
-<button type="button" class="btn" aria-label="Minus">-</button>
-
-
-<button type="button" class="btn">7</button>
-<button type="button" class="btn">8</button>
-<button type="button" class="btn">9</button>
-<button type="button" class="btn" aria-label="Plus">+</button>
-
-
-<button type="button" class="btn">4</button>
-<button type="button" class="btn">5</button>
-<button type="button" class="btn">6</button>
-<button type="button" class="btn equals" aria-label="Equals">=</button>
-
-<button type="button" class="btn">1</button>
-<button type="button" class="btn">2</button>
-<button type="button" class="btn">3</button>
-<button type="button" class="btn">0</button>
-
-
-<button type="button" class="btn" aria-label="Decimal point">.</button>
-</div>
+    <button class="btn">7</button>
+    <button class="btn">8</button>
+    <button class="btn">9</button>
+    <button class="btn">4</button>
+    <button class="btn">5</button>
+    <button class="btn">6</button>
+    <button class="btn">1</button>
+    <button class="btn">2</button>
+    <button class="btn">3</button>
+    <button class="btn zero">0</button>
+    <button class="btn">.</button>
+    <button class="btn equals">=</button>
+  </div>
 </div>
 
-<!-- Load our JavaScript at the end so the elements above already exist when JS runs -->
-<script src="script.js"></script>
+<script>
+const display = document.getElementById("display");
+const buttons = document.querySelectorAll(".btn");
+
+let resetNext = true;
+let firstOperand = null;
+let currentOperator = null;
+
+buttons.forEach(button => {
+  button.addEventListener("click", () => {
+    const char = button.textContent.trim();
+
+    if (button.classList.contains("clear")) {
+      display.textContent = "0";
+      firstOperand = null;
+      currentOperator = null;
+      resetNext = true;
+    } else if (button.classList.contains("equals")) {
+      if(currentOperator && firstOperand !== null){
+        const second = parseFloat(display.textContent);
+        let result;
+        switch(currentOperator){
+          case "+": result = firstOperand + second; break;
+          case "-": result = firstOperand - second; break;
+          case "*": result = firstOperand * second; break;
+          case "/": result = firstOperand / second; break;
+        }
+        display.textContent = result;
+        firstOperand = result;
+        currentOperator = null;
+        resetNext = true;
+      }
+    } else if (button.classList.contains("operator")) {
+      firstOperand = parseFloat(display.textContent);
+      currentOperator = char;
+      resetNext = true;
+    } else if(char === ".") {
+      if(resetNext){
+        display.textContent = "0.";
+        resetNext = false;
+      } else if(!display.textContent.includes(".")){
+        display.textContent += ".";
+      }
+    } else {
+      if(display.textContent === "0" || resetNext){
+        display.textContent = char;
+      } else {
+        display.textContent += char;
+      }
+      resetNext = false;
+    }
+  });
+});
+</script>
 <script>
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker
-      .register("service-worker.js")
-      .then(() => console.log("Service Worker registered!"))
-      .catch((err) => console.log("Service Worker failed:", err));
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(() => console.log("Service Worker registered"))
+      .catch(err => console.error("SW registration failed:", err));
   }
+</script>
 </script>
 
 </body>

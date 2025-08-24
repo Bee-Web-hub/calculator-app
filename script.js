@@ -1,59 +1,83 @@
-console.log("JS is working!");
-
-// Get the display box
 const display = document.getElementById("display");
+const buttons = document.querySelectorAll(".btn");
 
-// Get all the buttons
-const buttons = document.querySelectorAll("button");
+let resetNext = true;
+let currentOperator = null;
+let firstOperand = null;
 
-// Add event listeners to each button
 buttons.forEach(button => {
   button.addEventListener("click", () => {
-    // If the button is "C" -> clear the display
-    if (button.textContent === "C") {
-      display.value = "";
-    } 
-    // If the button is "=" -> evaluate the expression
-    else if (button.textContent === "=") {
-      try {
-        display.value = eval(display.value); // ⚠️ for now we use eval (simple way)
-      } catch {
-        display.value = "Error";
-      }
-    } 
-    // Otherwise, add the button text to the display
-    else {
-      display.value += button.textContent;
+    const char = button.textContent.trim();
+
+    if (button.classList.contains("clear")) {
+      clearDisplay();
+    } else if (button.classList.contains("equals")) {
+      calculateResult();
+    } else if (button.classList.contains("operator")) {  // ✅ use operator class
+      setOperator(char);
+    } else if (char === ".") {
+      appendDecimal();
+    } else {
+      appendToDisplay(char);
     }
   });
 });
 
 
-// Keyboard support
-document.addEventListener("keydown", (event) => {
-  const key = event.key;
+function appendToDisplay(char) {
+  // Replace display if it's "0" or after operator/result
+  if (display.textContent === "0" || resetNext) {
+    display.textContent = char;
+  } else {
+    display.textContent += char;
+  }
+  resetNext = false;
+}
 
-  // If number or operator
-  if (/[0-9+\-*/.]/.test(key)) {
-    display.value += key;
-  } 
-  // Enter = evaluate
-  else if (key === "Enter") {
-    try {
-      display.value = eval(display.value);
-    } catch {
-      display.value = "Error";
-    }
-  } 
-  // Backspace = remove last character
-  else if (key === "Backspace") {
-    display.value = display.value.slice(0, -1);
-  } 
-  // C or c = clear
-  else if (key.toLowerCase() === "c") {
-    display.value = "";
+function appendDecimal() {
+  if (resetNext) {
+    display.textContent = "0.";
+    resetNext = false;
+  } else if (!display.textContent.includes(".")) {
+    display.textContent += ".";
+  }
+}
+
+function clearDisplay() {
+  display.textContent = "0";
+  resetNext = true;
+  firstOperand = null;
+  currentOperator = null;
+}
+
+function setOperator(op) {
+  const currentValue = parseFloat(display.textContent);
+
+  if (firstOperand !== null && !resetNext) {
+    calculateResult();
+  } else {
+    firstOperand = currentValue;
   }
 
-  // Prevent default action (like form submission on Enter)
-  event.preventDefault();
-});
+  currentOperator = op;
+  resetNext = true;
+}
+
+function calculateResult() {
+  if (currentOperator && firstOperand !== null) {
+    const secondOperand = parseFloat(display.textContent);
+    let result;
+
+    switch (currentOperator) {
+      case "+": result = firstOperand + secondOperand; break;
+      case "-": result = firstOperand - secondOperand; break;
+      case "*": result = firstOperand * secondOperand; break;
+      case "/": result = firstOperand / secondOperand; break;
+    }
+
+    display.textContent = result;
+    firstOperand = result;
+    currentOperator = null;
+    resetNext = true;
+  }
+}
